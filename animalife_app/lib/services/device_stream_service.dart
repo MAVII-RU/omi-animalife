@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../config.dart';
@@ -68,10 +69,19 @@ class DeviceStreamService {
     _setState(DeviceStreamState.scanning);
 
     try {
-      // Scan for omi device (filter by service UUID)
+      // Check if we have a saved preferred device
+      final prefs = await SharedPreferences.getInstance();
+      final savedDeviceId = prefs.getString('saved_device_id');
+
+      // Scan for omi device — prefer saved device ID if available
       final completer = Completer<BluetoothDevice>();
       final scanSub = FlutterBluePlus.scanResults.listen((results) {
         for (final r in results) {
+          // Prefer saved device
+          if (savedDeviceId != null && r.device.remoteId.str == savedDeviceId) {
+            if (!completer.isCompleted) completer.complete(r.device);
+            return;
+          }
           final serviceUuids = r.advertisementData.serviceUuids.map((u) => u.toString().toLowerCase()).toList();
           if (serviceUuids.contains(kOmiServiceUuid.toLowerCase()) ||
               r.device.platformName.toLowerCase().contains('omi') ||

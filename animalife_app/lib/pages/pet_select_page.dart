@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/pet.dart';
 import '../services/animalife_api.dart';
+import 'device_setup_page.dart';
 import 'listen_page.dart';
+import 'login_page.dart';
 
 class PetSelectPage extends StatefulWidget {
   const PetSelectPage({super.key});
@@ -46,6 +48,30 @@ class _PetSelectPageState extends State<PetSelectPage> {
           IconButton(
             icon: const Icon(Icons.refresh, color: Colors.white54),
             onPressed: () { setState(() { _pets = null; _error = null; }); _load(); },
+            tooltip: 'Обновить',
+          ),
+          IconButton(
+            icon: const Icon(Icons.bluetooth, color: Colors.white54),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const DeviceSetupPage()),
+            ),
+            tooltip: 'Подключение устройства',
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.more_vert, color: Colors.white54),
+            color: const Color(0xFF2A2A4E),
+            onSelected: (v) async {
+              if (v == 'logout') {
+                await AnimalifeApi.clearToken();
+                if (!context.mounted) return;
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                );
+              }
+            },
+            itemBuilder: (_) => [
+              const PopupMenuItem(value: 'logout', child: Text('Выйти', style: TextStyle(color: Colors.white))),
+            ],
           ),
         ],
       ),
