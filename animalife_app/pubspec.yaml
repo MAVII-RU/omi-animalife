@@ -1,0 +1,33 @@
+name: animalife_device
+description: AnimalLife Device App — translate your pet's sounds via omi wearable.
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  provider: ^6.1.2
+
+  # BLE — omi device connection
+  flutter_blue_plus: 2.1.0
+
+  # Network
+  http: ^1.4.0
+  web_socket_channel: ^3.0.1
+
+  # Storage
+  shared_preferences: 2.5.3
+
+  # Permissions
+  permission_handler: ^12.0.0+1
+
+  # UI
+  cupertino_icons: ^1.0.8
+
+flutter:
+  uses-material-design: true
