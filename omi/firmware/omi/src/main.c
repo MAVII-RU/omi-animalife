@@ -16,6 +16,9 @@
 #endif
 #include "lib/core/settings.h"
 #include "lib/core/transport.h"
+#ifdef CONFIG_ANIMALIFE_ENABLE_ANIMAL_FILTER
+#include "lib/core/animal_filter.h"
+#endif
 #ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 #include "lib/core/storage.h"
 #endif
@@ -87,6 +90,12 @@ static void mic_handler(int16_t *buffer)
 
 #ifdef CONFIG_ANIMALIFE_ENABLE_T5838_AAD
     if (!aad_process_audio(buffer, MIC_BUFFER_SAMPLES)) {
+        return;
+    }
+#endif
+
+#ifdef CONFIG_ANIMALIFE_ENABLE_ANIMAL_FILTER
+    if (!animal_filter_process(buffer, MIC_BUFFER_SAMPLES)) {
         return;
     }
 #endif

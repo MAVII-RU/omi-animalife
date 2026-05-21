@@ -1,0 +1,62 @@
+#pragma once
+#include <stdint.h>
+
+#define CLASSIFIER_N_MFCC    40
+#define CLASSIFIER_N_FRAMES  40
+#define CLASSIFIER_THRESHOLD 0.65f
+
+/* Generated — do not edit. Re-run export_model.py after retraining. */
+
+extern const int8_t  CLASSIFIER_FEATURES_0_WEIGHT[144];
+extern const float   CLASSIFIER_FEATURES_0_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_0_BIAS[16];
+extern const float   CLASSIFIER_FEATURES_0_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_1_WEIGHT[16];
+extern const float   CLASSIFIER_FEATURES_1_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_1_BIAS[16];
+extern const float   CLASSIFIER_FEATURES_1_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_1_RUNNING_MEAN[16];
+extern const float   CLASSIFIER_FEATURES_1_RUNNING_MEAN_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_1_RUNNING_VAR[16];
+extern const float   CLASSIFIER_FEATURES_1_RUNNING_VAR_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_1_NUM_BATCHES_TRACKED[1];
+extern const float   CLASSIFIER_FEATURES_1_NUM_BATCHES_TRACKED_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_4_WEIGHT[4608];
+extern const float   CLASSIFIER_FEATURES_4_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_4_BIAS[32];
+extern const float   CLASSIFIER_FEATURES_4_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_5_WEIGHT[32];
+extern const float   CLASSIFIER_FEATURES_5_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_5_BIAS[32];
+extern const float   CLASSIFIER_FEATURES_5_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_5_RUNNING_MEAN[32];
+extern const float   CLASSIFIER_FEATURES_5_RUNNING_MEAN_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_5_RUNNING_VAR[32];
+extern const float   CLASSIFIER_FEATURES_5_RUNNING_VAR_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_5_NUM_BATCHES_TRACKED[1];
+extern const float   CLASSIFIER_FEATURES_5_NUM_BATCHES_TRACKED_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_8_WEIGHT[18432];
+extern const float   CLASSIFIER_FEATURES_8_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_8_BIAS[64];
+extern const float   CLASSIFIER_FEATURES_8_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_9_WEIGHT[64];
+extern const float   CLASSIFIER_FEATURES_9_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_9_BIAS[64];
+extern const float   CLASSIFIER_FEATURES_9_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_9_RUNNING_MEAN[64];
+extern const float   CLASSIFIER_FEATURES_9_RUNNING_MEAN_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_9_RUNNING_VAR[64];
+extern const float   CLASSIFIER_FEATURES_9_RUNNING_VAR_SCALE;
+extern const int8_t  CLASSIFIER_FEATURES_9_NUM_BATCHES_TRACKED[1];
+extern const float   CLASSIFIER_FEATURES_9_NUM_BATCHES_TRACKED_SCALE;
+extern const int8_t  CLASSIFIER_CLASSIFIER_1_WEIGHT[2048];
+extern const float   CLASSIFIER_CLASSIFIER_1_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_CLASSIFIER_1_BIAS[32];
+extern const float   CLASSIFIER_CLASSIFIER_1_BIAS_SCALE;
+extern const int8_t  CLASSIFIER_CLASSIFIER_4_WEIGHT[32];
+extern const float   CLASSIFIER_CLASSIFIER_4_WEIGHT_SCALE;
+extern const int8_t  CLASSIFIER_CLASSIFIER_4_BIAS[1];
+extern const float   CLASSIFIER_CLASSIFIER_4_BIAS_SCALE;
+
+/* Inference: returns animal score [0.0, 1.0] */
+float classifier_infer_mfcc(const float mfcc[CLASSIFIER_N_MFCC][CLASSIFIER_N_FRAMES]);

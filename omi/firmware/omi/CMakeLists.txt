@@ -34,6 +34,15 @@ if(CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE)
     list(APPEND core_sources src/lib/core/storage.c)
 endif()
 
+if(CONFIG_ANIMALIFE_ENABLE_ANIMAL_FILTER)
+    list(APPEND core_sources
+        src/lib/core/animal_filter.c
+        src/lib/core/animal_classifier_model.c
+        src/lib/core/animal_classifier_inference.c
+    )
+    target_compile_options(app PRIVATE -lm)
+endif()
+
 target_sources(app PRIVATE ${core_sources} ${app_sources})
 target_include_directories(app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
