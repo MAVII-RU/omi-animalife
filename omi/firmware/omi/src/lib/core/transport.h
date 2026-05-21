@@ -2,7 +2,7 @@
 #define TRANSPORT_H
 
 #include <zephyr/drivers/sensor.h>
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
 extern uint8_t battery_percentage;
 #endif
 /**

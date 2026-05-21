@@ -121,7 +121,7 @@ int app_sd_off(void);
  */
 void sd_write_pause(bool pause);
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 
 /**
  * @brief Write to the current audio file specified by the write pointer
@@ -291,6 +291,6 @@ void sd_off(void);
  */
 bool is_sd_on(void);
 
-#endif // CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#endif // CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 
 #endif // SD_CARD_H

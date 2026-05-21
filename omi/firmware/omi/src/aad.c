@@ -228,13 +228,13 @@ bool aad_process_audio(int16_t *buffer, size_t sample_count)
 
     uint32_t avg = avg_abs_amplitude(buffer, sample_count);
     int64_t now = k_uptime_get();
-    bool has_voice = avg >= CONFIG_OMI_VAD_ABS_THRESHOLD;
+    bool has_voice = avg >= CONFIG_ANIMALIFE_VAD_ABS_THRESHOLD;
 
     if (has_voice) {
         vad_last_voice_ms = now;
         if (!vad_is_recording) {
             vad_voice_streak++;
-            if (vad_voice_streak >= CONFIG_OMI_VAD_DEBOUNCE_FRAMES) {
+            if (vad_voice_streak >= CONFIG_ANIMALIFE_VAD_DEBOUNCE_FRAMES) {
                 preroll_queue_flush();
                 vad_is_recording = true;
                 vad_sleeping = false;
@@ -245,7 +245,7 @@ bool aad_process_audio(int16_t *buffer, size_t sample_count)
         vad_voice_streak = 0;
         if (vad_is_recording) {
             int64_t silent_ms = now - vad_last_voice_ms;
-            if (silent_ms >= CONFIG_OMI_VAD_HOLD_MS) {
+            if (silent_ms >= CONFIG_ANIMALIFE_VAD_HOLD_MS) {
                 vad_is_recording = false;
                 vad_sleeping = true;
                 LOG_INF("VAD: SLEEP (silent %lld ms)", silent_ms);
@@ -259,9 +259,9 @@ bool aad_process_audio(int16_t *buffer, size_t sample_count)
         LOG_INF("VAD: %s (avg=%u thr=%u deb=%u hold=%d)",
                 vad_is_recording ? "REC" : "SLEEP",
                 avg,
-                CONFIG_OMI_VAD_ABS_THRESHOLD,
-                CONFIG_OMI_VAD_DEBOUNCE_FRAMES,
-                CONFIG_OMI_VAD_HOLD_MS);
+                CONFIG_ANIMALIFE_VAD_ABS_THRESHOLD,
+                CONFIG_ANIMALIFE_VAD_DEBOUNCE_FRAMES,
+                CONFIG_ANIMALIFE_VAD_HOLD_MS);
         vad_next_status_ms = now + VAD_STATUS_LOG_INTERVAL_MS;
     }
 
@@ -339,9 +339,9 @@ int aad_start(void)
 
     LOG_INF("AAD: started (WAKE=P1.%d, thr=%d deb=%d hold=%d)",
             pin_wake.pin,
-            CONFIG_OMI_VAD_ABS_THRESHOLD,
-            CONFIG_OMI_VAD_DEBOUNCE_FRAMES,
-            CONFIG_OMI_VAD_HOLD_MS);
+            CONFIG_ANIMALIFE_VAD_ABS_THRESHOLD,
+            CONFIG_ANIMALIFE_VAD_DEBOUNCE_FRAMES,
+            CONFIG_ANIMALIFE_VAD_HOLD_MS);
     return 0;
 }
 

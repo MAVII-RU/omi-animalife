@@ -4,7 +4,7 @@
 
 LOG_MODULE_REGISTER(wdog_facade, CONFIG_LOG_DEFAULT_LEVEL);
 
-#define WATCHDOG_TIMEOUT_MS CONFIG_OMI_WATCHDOG_TIMEOUT_MS
+#define WATCHDOG_TIMEOUT_MS CONFIG_ANIMALIFE_WATCHDOG_TIMEOUT_MS
 
 static const struct device *wdt_dev;
 static int wdt_channel_id;

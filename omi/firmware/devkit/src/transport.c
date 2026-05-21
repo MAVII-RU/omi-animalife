@@ -101,7 +101,7 @@ static struct bt_gatt_attr audio_service_attr[] = {
                            audio_codec_read_characteristic,
                            NULL,
                            NULL),
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     BT_GATT_CHARACTERISTIC(&audio_characteristic_speaker_uuid.uuid,
                            BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
                            BT_GATT_PERM_WRITE,
@@ -824,11 +824,11 @@ int transport_start()
     LOG_INF("Transport bluetooth initialized");
 
     //  Enable button
-#ifdef CONFIG_OMI_ENABLE_BUTTON
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
     register_button_service();
 #endif
 
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     register_speaker_service();
 #endif
 

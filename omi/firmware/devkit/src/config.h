@@ -15,10 +15,10 @@
 #define PDM_PWR_PIN NRF_GPIO_PIN_MAP(1, 10)
 
 // Codecs
-#ifdef CONFIG_OMI_CODEC_OPUS
+#ifdef CONFIG_ANIMALIFE_CODEC_OPUS
 #define CODEC_OPUS 1
 #else
-#error "Enable CONFIG_OMI_CODEC_OPUS in the project .conf file"
+#error "Enable CONFIG_ANIMALIFE_CODEC_OPUS in the project .conf file"
 #endif
 
 #if CODEC_OPUS

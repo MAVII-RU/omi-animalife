@@ -20,7 +20,7 @@
 #include "wdog_facade.h"
 
 #include "imu.h"
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 #include "sd_card.h"
 #endif
 
@@ -354,7 +354,7 @@ void turnoff_all()
     // Set is_off immediately so set_led_state() keeps LEDs off
     is_off = true;
 
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
     play_haptic_milli(100);
     k_msleep(300);
     haptic_off();
@@ -372,13 +372,13 @@ void turnoff_all()
     k_msleep(100);
 
     // Turn off speaker if enabled
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     speaker_off();
     k_msleep(100);
 #endif
 
     // Turn off accelerometer if enabled
-#ifdef CONFIG_OMI_ENABLE_ACCELEROMETER
+#ifdef CONFIG_ANIMALIFE_ENABLE_ACCELEROMETER
     accel_off();
     k_msleep(100);
 #endif
@@ -389,13 +389,13 @@ void turnoff_all()
     k_msleep(300);
 
     // Put the buttons device to sleep if button is enabled
-#ifdef CONFIG_OMI_ENABLE_BUTTON
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
     pm_device_runtime_put(buttons);
     k_msleep(100);
 #endif
 
     // Disable USB if enabled
-#ifdef CONFIG_OMI_ENABLE_USB
+#ifdef CONFIG_ANIMALIFE_ENABLE_USB
     NRF_USBD->INTENCLR = 0xFFFFFFFF;
 #endif
 

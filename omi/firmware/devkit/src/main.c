@@ -174,7 +174,7 @@ int main(void)
     }
 
     // Enable battery
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
     err = battery_init();
     if (err) {
         LOG_ERR("Battery init failed (err %d)", err);
@@ -190,7 +190,7 @@ int main(void)
 #endif
 
     // Enable button
-#ifdef CONFIG_OMI_ENABLE_BUTTON
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
     err = button_init();
     if (err) {
         LOG_ERR("Failed to initialize Button (err %d)", err);
@@ -201,7 +201,7 @@ int main(void)
 #endif
 
     // Enable accelerometer
-#ifdef CONFIG_OMI_ENABLE_ACCELEROMETER
+#ifdef CONFIG_ANIMALIFE_ENABLE_ACCELEROMETER
     err = accel_start();
     if (err) {
         LOG_ERR("Accelerometer failed to activated (err %d)", err);
@@ -211,7 +211,7 @@ int main(void)
 #endif
 
     // Enable speaker
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     err = speaker_init();
     if (err) {
         LOG_ERR("Speaker failed to start");
@@ -221,7 +221,7 @@ int main(void)
 #endif
 
     // Enable sdcard
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     LOG_PRINTK("\n");
     LOG_INF("Mount SD card...\n");
 
@@ -242,7 +242,7 @@ int main(void)
 #endif
 
     // Enable haptic
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
     LOG_PRINTK("\n");
     LOG_INF("Initializing haptic...\n");
 
@@ -255,7 +255,7 @@ int main(void)
 #endif
 
     // Enable usb
-#ifdef CONFIG_OMI_ENABLE_USB
+#ifdef CONFIG_ANIMALIFE_ENABLE_USB
     LOG_PRINTK("\n");
     LOG_INF("Initializing power supply check...\n");
 
@@ -289,7 +289,7 @@ int main(void)
         return transportErr;
     }
 
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     play_boot_sound();
 #endif
 
@@ -312,7 +312,7 @@ int main(void)
         return err;
     }
 
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
     play_haptic_milli(500);
 #endif
     set_led_blue(false);

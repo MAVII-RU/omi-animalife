@@ -11,12 +11,12 @@
 #include "lib/core/led.h"
 #include "lib/core/lib/battery/battery.h"
 #include "lib/core/mic.h"
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
 #include "lib/core/monitor.h"
 #endif
 #include "lib/core/settings.h"
 #include "lib/core/transport.h"
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 #include "lib/core/storage.h"
 #endif
 #include <hal/nrf_reset.h>
@@ -26,13 +26,13 @@
 #include "rtc.h"
 #include "spi_flash.h"
 #include "wdog_facade.h"
-#ifdef CONFIG_OMI_ENABLE_T5838_AAD
+#ifdef CONFIG_ANIMALIFE_ENABLE_T5838_AAD
 #include "aad.h"
 #endif
 
 LOG_MODULE_REGISTER(main, CONFIG_LOG_DEFAULT_LEVEL);
 
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
 #define BATTERY_FULL_THRESHOLD_PERCENT 98 // 98%
 extern uint8_t battery_percentage;
 #endif
@@ -67,12 +67,12 @@ static void print_reset_reason(void)
 
 static void codec_handler(uint8_t *data, size_t len)
 {
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
     monitor_inc_broadcast_audio();
 #endif
     int err = broadcast_audio_packets(data, len);
     if (err) {
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
         monitor_inc_broadcast_audio_failed();
 #endif
     }
@@ -80,12 +80,12 @@ static void codec_handler(uint8_t *data, size_t len)
 
 static void mic_handler(int16_t *buffer)
 {
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
     // Track total bytes processed (each sample is 2 bytes)
     monitor_inc_mic_buffer();
 #endif
 
-#ifdef CONFIG_OMI_ENABLE_T5838_AAD
+#ifdef CONFIG_ANIMALIFE_ENABLE_T5838_AAD
     if (!aad_process_audio(buffer, MIC_BUFFER_SAMPLES)) {
         return;
     }
@@ -144,7 +144,7 @@ void set_led_state()
         return;
     }
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     // If RTC not synced, blink red to warn user to connect phone app
     if (!rtc_is_valid()) {
         set_led_green(is_charging);
@@ -160,7 +160,7 @@ void set_led_state()
     bool red = false;
 
     if (is_charging) {
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
         // Solid green if battery is full (>= BATTERY_FULL_THRESHOLD_PERCENT)
         if (battery_percentage >= BATTERY_FULL_THRESHOLD_PERCENT) {
             green = true;
@@ -208,7 +208,7 @@ int main(void)
 
     // Initialize Haptic driver first; this is building up for future of omi turn on sequence - long press to turn on
     // instead of short press
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
     ret = haptic_init();
     if (ret) {
         LOG_ERR("Failed to initialize Haptic driver (err %d)", ret);
@@ -254,7 +254,7 @@ int main(void)
 
     (void) lsm6dsl_time_boot_adjust_rtc();
 
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
     // Initialize monitoring system
     LOG_INF("Initializing monitoring system...\n");
     ret = monitor_init();
@@ -269,7 +269,7 @@ int main(void)
     }
 
     // Initialize battery
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
     ret = battery_init();
     if (ret) {
         LOG_ERR("Battery init failed (err %d)", ret);
@@ -287,7 +287,7 @@ int main(void)
 #endif
 
     // Initialize button
-#ifdef CONFIG_OMI_ENABLE_BUTTON
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
     ret = button_init();
     if (ret) {
         LOG_ERR("Failed to initialize Button (err %d)", ret);
@@ -306,7 +306,7 @@ int main(void)
         return ret;
     }
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     // Initialize storage service for offline audio
     ret = storage_init();
     if (ret) {
@@ -353,7 +353,7 @@ int main(void)
         return ret;
     }
 
-#ifdef CONFIG_OMI_ENABLE_T5838_AAD
+#ifdef CONFIG_ANIMALIFE_ENABLE_T5838_AAD
     ret = aad_start();
     if (ret) {
         LOG_ERR("AAD start failed (%d)", ret);
@@ -364,7 +364,7 @@ int main(void)
 
     while (1) {
         watchdog_feed();
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
         monitor_log_metrics();
 #endif
 

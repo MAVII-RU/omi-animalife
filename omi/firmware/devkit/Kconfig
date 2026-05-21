@@ -1,14 +1,14 @@
 source "Kconfig.zephyr"
 
-menu "Omi Features Configuration"
+menu "AnimaLife Features Configuration"
 
-config OMI_CODEC_OPUS
+config ANIMALIFE_CODEC_OPUS
     bool "Opus Audio Codec"
     help
         "Enable the Opus audio codec support."
     default n
 
-config OMI_ENABLE_OFFLINE_STORAGE
+config ANIMALIFE_ENABLE_OFFLINE_STORAGE
 	bool "Offline SD Card Storage"
     select DISK_ACCESS
     select FILE_SYSTEM
@@ -19,37 +19,37 @@ config OMI_ENABLE_OFFLINE_STORAGE
         "Enable the offline storage support. Requires a SD Card."
 	default n
 
-config OMI_ENABLE_ACCELEROMETER
+config ANIMALIFE_ENABLE_ACCELEROMETER
     bool "Accelerometer Support"
     help
         "Enable the accelerometer support."
     default n
 
-config OMI_ENABLE_BUTTON
+config ANIMALIFE_ENABLE_BUTTON
     bool "Button support"
     help
         "Enable the software button support."
     default n
 
-config OMI_ENABLE_SPEAKER
+config ANIMALIFE_ENABLE_SPEAKER
     bool "Enable the speaker"
     help
         "Enable the speaker support."
     default n
 
-config OMI_ENABLE_BATTERY
+config ANIMALIFE_ENABLE_BATTERY
     bool "Enable the battery"
     help
         "Enable the battery support."
     default n
 
-config OMI_ENABLE_USB
+config ANIMALIFE_ENABLE_USB
     bool "Enable the usb"
     help
         "Enable the USB power check support."
     default n
 
-config OMI_ENABLE_HAPTIC
+config ANIMALIFE_ENABLE_HAPTIC
     bool "Enable the haptic"
     help
         "Enable the haptic support."

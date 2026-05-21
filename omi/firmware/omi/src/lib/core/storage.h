@@ -1,7 +1,7 @@
 #ifndef STORAGE_H
 #define STORAGE_H
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 
 #include <stdbool.h>
 
@@ -26,6 +26,6 @@ void storage_stop_transfer();
  */
 bool storage_transfer_active(void);
 
-#endif // CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#endif // CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 
 #endif // STORAGE_H

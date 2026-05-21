@@ -8,10 +8,10 @@
     "configurePresets": [
         {
             "name": "OMI",
-            "displayName": "OMI",
+            "displayName": "AnimaLife",
             "configuration": "Debug",
             "hidden": false,
-            "description": "Debug build for omi device",
+            "description": "Debug build for AnimaLife device",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/omi",
             "cacheVariables": {

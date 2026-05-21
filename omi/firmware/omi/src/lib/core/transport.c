@@ -26,7 +26,7 @@
 #include "features.h"
 #include "haptic.h"
 #include "mic.h"
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
 #include "monitor.h"
 #endif
 #include "sd_card.h"
@@ -35,18 +35,18 @@
 #include "rtc.h"
 LOG_MODULE_REGISTER(transport, CONFIG_LOG_DEFAULT_LEVEL);
 
-#ifdef CONFIG_OMI_ENABLE_RFSW_CTRL
+#ifdef CONFIG_ANIMALIFE_ENABLE_RFSW_CTRL
 static const struct gpio_dt_spec rfsw_en = GPIO_DT_SPEC_GET_OR(DT_NODELABEL(rfsw_en_pin), gpios, {0});
 #endif
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 extern struct bt_gatt_service storage_service;
 extern bool storage_is_on;
 static bool storage_full_warned = false;
 #endif
 
 extern bool is_connected;
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
 extern bool is_charging;
 #endif
 static atomic_t pusher_stop_flag;
@@ -156,7 +156,7 @@ static struct bt_gatt_attr audio_service_attr[] = {
                            audio_codec_read_characteristic,
                            NULL,
                            NULL),
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     BT_GATT_CHARACTERISTIC(&audio_characteristic_speaker_uuid.uuid,
                            BT_GATT_CHRC_WRITE | BT_GATT_CHRC_NOTIFY,
                            BT_GATT_PERM_WRITE,
@@ -467,31 +467,31 @@ features_read_handler(struct bt_conn *conn, const struct bt_gatt_attr *attr, voi
 {
     uint32_t features = 0;
 
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
-    features |= OMI_FEATURE_SPEAKER;
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
+    features |= ANIMALIFE_FEATURE_SPEAKER;
 #endif
-#ifdef CONFIG_OMI_ENABLE_ACCELEROMETER
-    features |= OMI_FEATURE_ACCELEROMETER;
+#ifdef CONFIG_ANIMALIFE_ENABLE_ACCELEROMETER
+    features |= ANIMALIFE_FEATURE_ACCELEROMETER;
 #endif
-#ifdef CONFIG_OMI_ENABLE_BUTTON
-    features |= OMI_FEATURE_BUTTON;
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
+    features |= ANIMALIFE_FEATURE_BUTTON;
 #endif
-#ifdef CONFIG_OMI_ENABLE_BATTERY
-    features |= OMI_FEATURE_BATTERY;
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
+    features |= ANIMALIFE_FEATURE_BATTERY;
 #endif
-#ifdef CONFIG_OMI_ENABLE_USB
-    features |= OMI_FEATURE_USB;
+#ifdef CONFIG_ANIMALIFE_ENABLE_USB
+    features |= ANIMALIFE_FEATURE_USB;
 #endif
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
-    features |= OMI_FEATURE_HAPTIC;
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
+    features |= ANIMALIFE_FEATURE_HAPTIC;
 #endif
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
-    features |= OMI_FEATURE_OFFLINE_STORAGE;
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
+    features |= ANIMALIFE_FEATURE_OFFLINE_STORAGE;
 #endif
     // LED dimming is always enabled now with PWM.
-    features |= OMI_FEATURE_LED_DIMMING;
+    features |= ANIMALIFE_FEATURE_LED_DIMMING;
     // Mic gain control is always enabled.
-    features |= OMI_FEATURE_MIC_GAIN;
+    features |= ANIMALIFE_FEATURE_MIC_GAIN;
 
     return bt_gatt_attr_read(conn, attr, buf, len, offset, &features, sizeof(features));
 }
@@ -514,10 +514,10 @@ static void exchange_func(struct bt_conn *conn, uint8_t att_err, struct bt_gatt_
 // Battery Service Handlers
 //
 
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
 #define BATTERY_REFRESH_INTERVAL_CONNECTED   5000 // 5 seconds
 #define BATTERY_REFRESH_INTERVAL_DISCONNECTED 10000 // 10 seconds
-#define CONFIG_OMI_BATTERY_CRITICAL_MV  3500  // mV
+#define CONFIG_ANIMALIFE_BATTERY_CRITICAL_MV  3500  // mV
 uint8_t battery_percentage = 0;
 static int8_t charging_status_last_notified = -1;
 void broadcast_battery_level(struct k_work *work_item);
@@ -580,7 +580,7 @@ void broadcast_battery_level(struct k_work *work_item)
                 LOG_ERR("Error updating battery level: %d", err);
             }
         }
-        if (battery_millivolt < CONFIG_OMI_BATTERY_CRITICAL_MV) {
+        if (battery_millivolt < CONFIG_ANIMALIFE_BATTERY_CRITICAL_MV) {
             LOG_WRN("Battery critical level reached (%d mV). Initiating shutdown.", battery_millivolt);
             turnoff_all();
         }
@@ -599,7 +599,7 @@ void broadcast_battery_level(struct k_work *work_item)
 static void _transport_connected(struct bt_conn *conn, uint8_t err)
 {
     struct bt_conn_info info = {0};
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     storage_is_on = true;
 #endif
 
@@ -649,7 +649,7 @@ static void _transport_connected(struct bt_conn *conn, uint8_t err)
     }
 
     // Notify SD module about BLE connection (flush current file)
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     sd_notify_ble_state(true);
 #endif
 }
@@ -677,7 +677,7 @@ static void _transport_disconnected(struct bt_conn *conn, uint8_t err)
     }
 
     // Stop auto-sync and save current sync offset
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     sd_notify_ble_state(false);
     storage_is_on = false;
 #endif
@@ -989,7 +989,7 @@ K_SEM_DEFINE(tx_queue_sem, 0, NETWORK_RING_BUF_SIZE);
 
 static bool write_to_tx_queue(uint8_t *data, size_t size)
 {
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
     // Increment the counter
     monitor_inc_tx_queue_write();
 #endif
@@ -1094,7 +1094,7 @@ static bool push_to_gatt(struct bt_conn *conn)
                 .user_data = NULL,
             };
             int err = bt_gatt_notify_cb(conn, &params);
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
             monitor_inc_gatt_notify();
 #endif
 
@@ -1129,7 +1129,7 @@ static bool push_to_gatt(struct bt_conn *conn)
 static uint32_t offset = 0;
 static uint16_t buffer_offset = 0;
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
 static uint8_t storage_temp_data[MAX_WRITE_SIZE];
 bool write_to_storage(void)
 {
@@ -1161,7 +1161,7 @@ bool write_to_storage(void)
         buffer_offset = buffer_offset + packet_size;
     }
 
-#ifdef CONFIG_OMI_ENABLE_MONITOR
+#ifdef CONFIG_ANIMALIFE_ENABLE_MONITOR
     monitor_inc_storage_write();
 #endif
     return true;
@@ -1229,7 +1229,7 @@ void pusher(void)
                 push_to_gatt(conn);
                 bt_conn_unref(conn);
             } else if (!conn) {
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
                 if (get_file_size() < MAX_STORAGE_BYTES && is_sd_on()) {
                     storage_full_warned = false;
                     write_to_storage();
@@ -1280,7 +1280,7 @@ int transport_off()
     }
 
     // Pull the rfsw control low
-#ifdef CONFIG_OMI_ENABLE_RFSW_CTRL
+#ifdef CONFIG_ANIMALIFE_ENABLE_RFSW_CTRL
     err = gpio_pin_set_dt(&rfsw_en, 0);
     if (err) {
         LOG_ERR("Failed to pull the rfsw control low %d", err);
@@ -1291,7 +1291,7 @@ int transport_off()
     is_connected = false;
     current_mtu = 0;
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     storage_is_on = false;
 #endif
 
@@ -1304,7 +1304,7 @@ int transport_start()
     int err = 0;
 
     // Pull the nfsw control high
-#ifdef CONFIG_OMI_ENABLE_RFSW_CTRL
+#ifdef CONFIG_ANIMALIFE_ENABLE_RFSW_CTRL
     err = gpio_pin_configure_dt(&rfsw_en, (GPIO_OUTPUT | NRF_GPIO_DRIVE_S0H1));
     if (err) {
         LOG_ERR("Failed to get the rfsw pin config (err %d)", err);
@@ -1346,7 +1346,7 @@ int transport_start()
     }
 
     //  Enable accelerometer
-#ifdef CONFIG_OMI_ENABLE_ACCELEROMETER
+#ifdef CONFIG_ANIMALIFE_ENABLE_ACCELEROMETER
     err = accel_start();
     if (!err) {
         LOG_INF("Accelerometer failed to activate\n");
@@ -1356,20 +1356,20 @@ int transport_start()
     }
 #endif
     //  Enable button
-#ifdef CONFIG_OMI_ENABLE_BUTTON
+#ifdef CONFIG_ANIMALIFE_ENABLE_BUTTON
     button_init();
     register_button_service();
     activate_button_work();
 #endif
 
 // Initialize and register Haptic service if enabled
-#ifdef CONFIG_OMI_ENABLE_HAPTIC
+#ifdef CONFIG_ANIMALIFE_ENABLE_HAPTIC
     // Note: haptic_init() is called in main.c
     register_haptic_service();
     LOG_INF("Haptic service registered via transport");
 #endif
 
-#ifdef CONFIG_OMI_ENABLE_SPEAKER
+#ifdef CONFIG_ANIMALIFE_ENABLE_SPEAKER
     err = speaker_init();
     if (err) {
         LOG_ERR("Speaker failed to start");
@@ -1386,7 +1386,7 @@ int transport_start()
     bt_gatt_service_register(&features_service);
     bt_gatt_service_register(&time_sync_service);
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     // Register storage service for offline audio
     memset(storage_temp_data, 0, OPUS_PADDED_LENGTH * 4);
     bt_gatt_service_register(&storage_service);
@@ -1399,7 +1399,7 @@ int transport_start()
         LOG_INF("Advertising successfully started");
     }
 
-#ifdef CONFIG_OMI_ENABLE_BATTERY
+#ifdef CONFIG_ANIMALIFE_ENABLE_BATTERY
     int battErr = 0;
     battErr |= battery_charge_start();
     if (battErr) {

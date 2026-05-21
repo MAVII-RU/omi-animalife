@@ -19,7 +19,7 @@ file(GLOB app_sources
     src/imu.c
 )
 
-if(CONFIG_OMI_ENABLE_T5838_AAD)
+if(CONFIG_ANIMALIFE_ENABLE_T5838_AAD)
     list(APPEND app_sources src/aad.c)
 endif()
 file(GLOB core_sources
@@ -30,7 +30,7 @@ file(GLOB core_sources
     src/lib/core/monitor.c
 )
 
-if(CONFIG_OMI_ENABLE_OFFLINE_STORAGE)
+if(CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE)
     list(APPEND core_sources src/lib/core/storage.c)
 endif()
 
@@ -40,7 +40,7 @@ target_include_directories(app PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/lib/core
 )
 
-if(CONFIG_OMI_CODEC_OPUS)
+if(CONFIG_ANIMALIFE_CODEC_OPUS)
     add_subdirectory(src/lib/core/lib/opus-1.2.1/)
     target_link_libraries(app PRIVATE opus_codec)
 endif()

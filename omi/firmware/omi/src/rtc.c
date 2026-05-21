@@ -28,7 +28,7 @@ static void rtc_persist_work_handler(struct k_work *work)
     epoch_s = pending_epoch_to_persist;
     k_mutex_unlock(&rtc_lock);
 
-#ifdef CONFIG_OMI_ENABLE_OFFLINE_STORAGE
+#ifdef CONFIG_ANIMALIFE_ENABLE_OFFLINE_STORAGE
     sd_notify_time_synced((uint32_t)epoch_s);
 #endif
 
